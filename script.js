@@ -22,6 +22,7 @@ function createRepositoryItem(repository) {
   link.href = repository.url;
   link.target = "_blank";
   link.rel = "noreferrer";
+  link.setAttribute("aria-label", `${repository.repository} (opens in a new tab)`);
   link.textContent = repository.repository;
 
   description.className = "repository-description";
@@ -54,7 +55,10 @@ async function loadRepositories() {
 
     repositoryList.replaceChildren(...repositories.map(createRepositoryItem));
     repositoryCount.textContent = repositories.length;
-    listStatus.textContent = repositories.length ? "" : "No starred repositories yet.";
+    const repositoryLabel = repositories.length === 1 ? "repository" : "repositories";
+    listStatus.textContent = repositories.length
+      ? `${repositories.length} ${repositoryLabel} loaded.`
+      : "No starred repositories yet.";
   } catch (error) {
     listStatus.textContent = "Repositories could not be loaded. Please try again later.";
     console.error("Unable to load starred repositories:", error);
